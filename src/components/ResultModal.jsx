@@ -1,9 +1,17 @@
-import { forwardRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
 const ResultModal = forwardRef(function ResultModal(
   { result, targetTime },
   ref
 ) {
+  const dialogRef = useRef();
+  useImperativeHandle(ref, () => {
+    return {
+      open() {
+        dialogRef.current.showModal();
+      }
+    };
+  });
   // close the dialog when click out side the box
   const closeHandler = (e) => {
     const dialogDimensions = ref.current.getBoundingClientRect();
@@ -16,8 +24,9 @@ const ResultModal = forwardRef(function ResultModal(
       ref.current.close();
     }
   };
+
   return (
-    <dialog className="result-modal" ref={ref} onClick={closeHandler}>
+    <dialog className="result-modal" ref={dialogRef} onClick={closeHandler}>
       <h2>Your {result}</h2>
       <p>
         The Target Time Was <strong>{targetTime} seconds.</strong>
