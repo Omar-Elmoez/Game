@@ -12,10 +12,13 @@ function TimeChallenge(props) {
 
   if (timeRemaining <= 0) {
     clearInterval(timer.current);
-    setTimeRemaining(props.targetTime * 1000);
     dialog.current.open();
   }
 
+  const handleReset = () => {
+    setTimeRemaining(props.targetTime * 1000);
+  };
+  
   const startChallengeHandler = () => {
     timer.current = setInterval(() => {
       setTimeRemaining((prevTimeRemaining) => prevTimeRemaining - 10);
@@ -29,7 +32,12 @@ function TimeChallenge(props) {
 
   return (
     <>
-      <ResultModal ref={dialog} targetTime={props.targetTime} result="Lost!" />
+      <ResultModal
+        ref={dialog}
+        targetTime={props.targetTime}
+        timeRemaining={timeRemaining}
+        onReset={handleReset}
+      />
       <section className="challenge">
         <h2>{props.title}</h2>
         <p className="challenge-time">
